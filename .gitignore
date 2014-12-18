@@ -1,0 +1,17 @@
+*~
+*.so
+
+
+*.cmake
+CMakeCache.txt
+Makefile
+CMakeFiles
+
+baker
+connect-four
+qbf
+speeddating
+qdimacs
+matrix-game
+nim-fibo
+sample-from-file
