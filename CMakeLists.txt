@@ -34,7 +34,7 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SET(GECODE_SRC "${CMAKE_SOURCE_DIR}" CACHE PATH "Path where GeCode source is installed")
+SET(GECODE_SRC "${CMAKE_SOURCE_DIR}/../Gecode" CACHE PATH "Path where GeCode source is installed")
 SET(GECODE_BIN "${GECODE_SRC}" CACHE PATH "Path where GeCode libs and binaries are installed")
 
 # If the user specifies -DCMAKE_BUILD_TYPE on the command line, take their definition
@@ -144,6 +144,7 @@ SET(SIBUS_HEADERS
 )
 SET(SIBUS_HEADERS_NEED_THREADS
   sibus/receivers/receiver-network.hh
+  sibus/receivers/receiver-message_queue.hh
 )
 SET(SIBUS_HPP
   sibus/sibus.hpp
@@ -155,6 +156,7 @@ SET(SIBUS_SRCS
   sibus/receivers/receiver-gecode.cpp
   sibus/receivers/receiver-compil-certif.cpp
   sibus/receivers/receiver-nodecount.cpp
+  sibus/receivers/receiver-message_queue.cpp
 )
 SET(SIBUS_SRCS_NEED_THREADS
   sibus/receivers/receiver-network.cpp
