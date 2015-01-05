@@ -6,9 +6,11 @@
 
 #ifdef SIBUS_THREAD
 
+#define OSTREAM ostream
+
 const char* MessageQueueReceiver::IPC_NAME_TO_ADAPTER = "SIBusShared_toAdapter";
 const char* MessageQueueReceiver::IPC_NAME_FROM_ADAPTER = "SIBusShared_fromAdapter";
-const int MessageQueueReceiver::MAX_MESSAGES = 100;
+const int MessageQueueReceiver::MAX_MESSAGES = 40000;
 const int MessageQueueReceiver::MESSAGE_SIZE = 200;
 
 MessageQueueReceiver::MessageQueueReceiver() :
@@ -26,14 +28,14 @@ void MessageQueueReceiver::setSIBus(SIBus const * _sibus) {
   sibus = _sibus;
   if (_sibus != NULL) {
     fromAdapterQueue = new boost::interprocess::message_queue(
-		             boost::interprocess::open_or_create
+			     boost::interprocess::open_or_create,
 			     IPC_NAME_FROM_ADAPTER,
-			     MAX_MESSAGE,
+			     MAX_MESSAGES,
 			     MESSAGE_SIZE);
     toAdapterQueue = new boost::interprocess::message_queue(
-		             boost::interprocess::open_or_create
+			      boost::interprocess::open_or_create,
 			     IPC_NAME_TO_ADAPTER,
-			     MAX_MESSAGE,
+			     MAX_MESSAGES,
 			     MESSAGE_SIZE);
     fromAdapterThread = new boost::thread(&MessageQueueReceiver::listen, this);
     toAdapterThread = new boost::thread(&MessageQueueReceiver::run, this);
@@ -215,7 +217,7 @@ void MessageQueueReceiver::manageEvent(const SIBus::TLEvent& e) {
   //boost::system::error_code ignored_error;
   //boost::asio::write(*m_socket, boost::asio::buffer(ostream.str()), ignored_error);
   std::string line = ostream.str();
-  toAdapterQueue.send(line.data(), line.size(), 0);
+  toAdapterQueue->send(line.data(), line.size(), 0);
   //if (closeSendSocket) m_socket->shutdown(boost::asio::ip::tcp::socket::shutdown_send);
 }
 
@@ -333,7 +335,7 @@ void MessageQueueReceiver::listen(void) {
     line.resize(MESSAGE_SIZE);
 
     //size_t len = m_socket->read_some(boost::asio::buffer(buf), error);
-    fromAdapterQueue.receive(&line[0], MESSAGE_SIZE, receivedSize, priority);
+    fromAdapterQueue->receive(&line[0], MESSAGE_SIZE, receivedSize, priority);
 
     /*if (error == boost::asio::error::eof)
       break; // Connection closed cleanly by peer.

@@ -15,3 +15,11 @@ qdimacs
 matrix-game
 nim-fibo
 sample-from-file
+baker-dbh
+baker-queues
+matrix-game-dbh
+nim-fibo-dbh
+
+baker_exec.txt
+speeddating.txt
+

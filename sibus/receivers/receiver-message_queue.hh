@@ -10,7 +10,7 @@
 #include<boost/thread.hpp>
 #include<boost/interprocess/ipc/message_queue.hpp>
 
-class SIBUS_VTABLE_EXPORT MessageQueueReceiver : public receiver {
+class SIBUS_VTABLE_EXPORT MessageQueueReceiver : public Receiver {
 
   // Threads
   boost::thread* fromAdapterThread;
@@ -66,7 +66,7 @@ class SIBUS_VTABLE_EXPORT MessageQueueReceiver : public receiver {
   void eventDomainDescription(unsigned int idVar, const std::vector<TVal>& domain);
   void eventSwapRequest(unsigned int idVar, unsigned int idVal1, unsigned int idVal2);
   void eventSwapDone(unsigned int idVar, unsigned int idVal1, unsigned int idVal2);
-}
+};
 
 #endif
 #endif
