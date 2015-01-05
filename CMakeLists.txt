@@ -179,6 +179,7 @@ SET(SIBUS_EXAMPLES_SRCS_NEED_THREADS
   examples/baker-dbh.cpp
   examples/nim-fibo-dbh.cpp
   examples/matrix-game-dbh.cpp
+  examples/baker-queues.cpp
 )
 SOURCE_GROUP("Hpp Files" REGULAR_EXPRESSION ".hpp")
 
