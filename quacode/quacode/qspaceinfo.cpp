@@ -490,7 +490,7 @@ namespace Gecode {
     // We iterate over blocks of variables with the same quantifier
     while (i < x.size()) {
       IntVarArgs UW_X;
-      IntVar* uwxi = NULL;
+      IntVar* uwxi = NULL;											
       TQuantifier qi = EXISTS;
 
       while (i < x.size())
@@ -516,7 +516,7 @@ namespace Gecode {
       };
       int lastBrancherId = sharedInfo.getLastBrancherId();
       int offSet = 0;
-      if (lastBrancherId) offSet = sharedInfo.brancherOffset(lastBrancherId);
+      if (lastBrancherId) offSet = sharedInfo.brancherOffset(lastBrancherId) + sharedInfo.brancherSize(lastBrancherId);
       BrancherHandle bh = Branch::QViewValuesOrderBrancher<1,true>::post(home,receiver,xv,offSet,vs,bf,&doubleChoice);
 
       // Update shared info

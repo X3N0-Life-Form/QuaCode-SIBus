@@ -417,6 +417,8 @@ namespace Gecode {
       forceinline TQuantifier brancherQuantifier(unsigned int id) const { return v[id-1].quantifier; }
       /// Return the offset computed when the brancher \a bh was added
       forceinline unsigned int brancherOffset(const unsigned int id) const { return v[id-1].offset; }
+      /// Return the size computed when the brancher \a bh was added
+      forceinline unsigned int brancherSize(const unsigned int id) const { return v[id-1].size; }
       // Return the last id of brancher stored in Shared Info.
       // Return 0 if no brancher recorded.
       forceinline int getLastBrancherId(void) const { return v.size(); }
@@ -457,6 +459,8 @@ namespace Gecode {
         TQuantifier brancherQuantifier(unsigned int id) const;
         /// Return the offset computed when the brancher \a id was added
         unsigned int brancherOffset(unsigned int id) const;
+        /// Return the size computed when the brancher \a bh was added
+        unsigned int brancherSize(const unsigned int id) const;
         /// Initialize data structures of strategy, may return another method if strategy can't be allocated with given method
         StrategyMethod strategyInit(StrategyMethod sm);
         /// Clear all data of the current strategy (used when search algorithm resets as well)

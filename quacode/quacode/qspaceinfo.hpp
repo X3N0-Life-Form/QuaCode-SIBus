@@ -591,6 +591,11 @@ namespace Gecode {
     return static_cast<QSpaceSharedInfoO*>(object())->brancherOffset(id);
   }
 
+  forceinline unsigned int
+  QSpaceInfo::QSpaceSharedInfo::brancherSize(unsigned int id) const {
+    return static_cast<QSpaceSharedInfoO*>(object())->brancherSize(id);
+  }
+
   forceinline int
   QSpaceInfo::QSpaceSharedInfo::getLastBrancherId(void) const {
     return static_cast<QSpaceSharedInfoO*>(object())->getLastBrancherId();
