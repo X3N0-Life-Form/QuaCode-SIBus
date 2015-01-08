@@ -115,6 +115,7 @@ namespace Gecode { namespace Search { namespace Sequential {
           return NULL;
         node++;
 
+        //usleep(15); // uncomment if you want to slow QuaCode down a bit
         SpaceStatus curStatus = cur->status(*this);
         // If no more propagators in space then all is succes below.
         // We deal with that case as any other success.
