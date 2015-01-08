@@ -42,8 +42,10 @@
 #include <gecode/driver.hh>
 
 #include <sibus/receivers/receiver-out.hh>
-#include <sibus/receivers/receiver-nodecount.hh>
 #include <sibus/receivers/receiver-message_queue.hh>
+#include <sibus/receivers/receiver-gecode.hh>
+
+ReceiverGecode rGecode;
 
 using namespace Gecode;
 
@@ -113,7 +115,7 @@ public:
     // DEBUT DESCRIPTION PB
     std::cout << "Loading problem" << std::endl;
     using namespace Int;
-    SIBus::instance().sendVar(TVarBinder(EXISTS,"w1",TYPE_INT,TVal(1,40)));
+    SIBus::instance().sendVar(TVarBinder(EXISTS,"w1",TYPE_INT,TVal(2,40)));
     SIBus::instance().sendVar(TVarBinder(EXISTS,"w2",TYPE_INT,TVal(1,40)));
     SIBus::instance().sendVar(TVarBinder(EXISTS,"w3",TYPE_INT,TVal(1,40)));
     SIBus::instance().sendVar(TVarBinder(EXISTS,"w4",TYPE_INT,TVal(1,40)));
@@ -127,29 +129,31 @@ public:
     SIBus::instance().sendVar(TVarAux("o3",TYPE_INT));
     SIBus::instance().sendVar(TVarAux("o4",TYPE_INT));
 
-    IntVarArgs w(*this,4,1,40);
+    IntVarArgs v(*this,1,2,40);
+    IntVarArgs w(*this,3,1,40);
     IntVar f(*this,1,40);
-    setForAll(*this, f);
     IntVarArgs c(*this,4,-1,1);
+
     IntVarArgs vaX;
-    vaX << w << f << c;
+    vaX << v << w << f << c;
+    setForAll(*this,f);
     X = IntVarArray(*this, vaX);
 
     IntVar o1(*this,-40,40), o2(*this,-40,40), o3(*this,-40,40), o4(*this,-40,40);
-    rel(*this, w[0], IRT_GR, opt.n);
-    rel(*this, w[0] * c[0] == o1);
-    rel(*this, w[1] * c[1] == o2);
-    rel(*this, w[2] * c[2] == o3);
-    rel(*this, w[3] * c[3] == o4);
+    rel(*this, v[0], IRT_GR, opt.n);
+    rel(*this, v[0] * c[0] == o1);
+    rel(*this, w[0] * c[1] == o2);
+    rel(*this, w[1] * c[2] == o3);
+    rel(*this, w[2] * c[3] == o4);
     rel(*this, o1 + o2 + o3 + o4 == f);
 
-    SIBus::instance().sendConstraint(TIMES, vlist_of<TArg>(CMP_EQ)("w1")("c1")("o1"));
-    SIBus::instance().sendConstraint(TIMES, vlist_of<TArg>(CMP_EQ)("w2")("c2")("o2"));
-    SIBus::instance().sendConstraint(TIMES, vlist_of<TArg>(CMP_EQ)("w3")("c3")("o3"));
-    SIBus::instance().sendConstraint(TIMES, vlist_of<TArg>(CMP_EQ)("w4")("c4")("o4"));
-    SIBus::instance().sendConstraint(LINEAR, vlist_of<TArg>(CMP_EQ)(1)("o1")(1)("o2")(1)("o3")(1)("o4")(-1)("f")(0));
+    SIBus::instance().sendConstraint(TIMES, vlist_of<TArg>(CMP_EQ)("w1")("c1")(CMP_EQ)("o1"));
+    SIBus::instance().sendConstraint(TIMES, vlist_of<TArg>(CMP_EQ)("w2")("c2")(CMP_EQ)("o2"));
+    SIBus::instance().sendConstraint(TIMES, vlist_of<TArg>(CMP_EQ)("w3")("c3")(CMP_EQ)("o3"));
+    SIBus::instance().sendConstraint(TIMES, vlist_of<TArg>(CMP_EQ)("w4")("c4")(CMP_EQ)("o4"));
+    SIBus::instance().sendConstraint(LINEAR, vlist_of<TArg>(CMP_EQ)(1)("o1")(1)("o2")(1)("o3")(1)("o4")(-1)("f")(CMP_EQ)(0));
 
-    branch(*this, X, INT_VAR_NONE(), INT_VALUES_MIN());
+    branch(*this, rGecode, X, INT_VAR_NONE());
 
     // FIN DESCRIPTION PB
     SIBus::instance().sendCloseModeling();
@@ -182,13 +186,12 @@ public:
 int main(int argc, char* argv[])
 {
   ProcessSTDOUT pStdout;
-  ProcessNodeCount pNodeCount;
   MessageQueueReceiver mqr;
 
   SIBus::create();
   SIBus::instance().addReceiver(pStdout);
-  SIBus::instance().addReceiver(pNodeCount);
   SIBus::instance().addReceiver(mqr);
+  SIBus::instance().addReceiver(rGecode);
 
   BakerOptions opt("Baker Problem",0);
   opt.parse(argc,argv);

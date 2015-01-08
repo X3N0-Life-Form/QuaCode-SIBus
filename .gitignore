@@ -17,9 +17,14 @@ nim-fibo
 sample-from-file
 baker-dbh
 baker-queues
+baker-queues2
+baker-dbh-queues
+baker-dbh-queues2
 matrix-game-dbh
 nim-fibo-dbh
 
 baker_exec.txt
+baker.spew
+baker-q.txt
 speeddating.txt
 

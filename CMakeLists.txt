@@ -180,6 +180,9 @@ SET(SIBUS_EXAMPLES_SRCS_NEED_THREADS
   examples/nim-fibo-dbh.cpp
   examples/matrix-game-dbh.cpp
   examples/baker-queues.cpp
+  examples/baker-queues2.cpp
+  examples/baker-dbh-queues.cpp
+  examples/baker-dbh-queues2.cpp
 )
 SOURCE_GROUP("Hpp Files" REGULAR_EXPRESSION ".hpp")
 
@@ -191,7 +194,7 @@ IF (SIBUS_THREAD)
   IF(NOT Threads_FOUND)
     MESSAGE(FATAL_ERROR "Thread (pthread) library are needed, consider to install them or disable SIBus threads.")
   ELSE()
-    FIND_PACKAGE(Boost 1.49.0 COMPONENTS system thread)
+    FIND_PACKAGE(Boost 1.48.0 COMPONENTS system thread)
     IF(NOT Boost_FOUND)
       MESSAGE(STATUS "Try to find local Boost libraries.")
       SET(BOOST_LIBRARYDIR ${CMAKE_CURRENT_BINARY_DIR}/..)

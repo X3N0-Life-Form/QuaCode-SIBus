@@ -113,7 +113,7 @@ public:
     // DEBUT DESCRIPTION PB
     std::cout << "Loading problem" << std::endl;
     using namespace Int;
-    SIBus::instance().sendVar(TVarBinder(EXISTS,"w1",TYPE_INT,TVal(1,40)));
+    SIBus::instance().sendVar(TVarBinder(EXISTS,"w1",TYPE_INT,TVal(2,40)));
     SIBus::instance().sendVar(TVarBinder(EXISTS,"w2",TYPE_INT,TVal(1,40)));
     SIBus::instance().sendVar(TVarBinder(EXISTS,"w3",TYPE_INT,TVal(1,40)));
     SIBus::instance().sendVar(TVarBinder(EXISTS,"w4",TYPE_INT,TVal(1,40)));
@@ -127,20 +127,21 @@ public:
     SIBus::instance().sendVar(TVarAux("o3",TYPE_INT));
     SIBus::instance().sendVar(TVarAux("o4",TYPE_INT));
 
-    IntVarArgs w(*this,4,1,40);
+    IntVarArgs v(*this,1,2,40);
+    IntVarArgs w(*this,3,1,40);
     IntVar f(*this,1,40);
     setForAll(*this, f);
     IntVarArgs c(*this,4,-1,1);
     IntVarArgs vaX;
-    vaX << w << f << c;
+    vaX << v << w << f << c;
     X = IntVarArray(*this, vaX);
 
     IntVar o1(*this,-40,40), o2(*this,-40,40), o3(*this,-40,40), o4(*this,-40,40);
-    rel(*this, w[0], IRT_GR, opt.n);
-    rel(*this, w[0] * c[0] == o1);
-    rel(*this, w[1] * c[1] == o2);
-    rel(*this, w[2] * c[2] == o3);
-    rel(*this, w[3] * c[3] == o4);
+    rel(*this, v[0], IRT_GR, opt.n);
+    rel(*this, v[0] * c[0] == o1);
+    rel(*this, w[0] * c[1] == o2);
+    rel(*this, w[1] * c[2] == o3);
+    rel(*this, w[2] * c[3] == o4);
     rel(*this, o1 + o2 + o3 + o4 == f);
 
     SIBus::instance().sendConstraint(TIMES, vlist_of<TArg>(CMP_EQ)("w1")("c1")("o1"));
@@ -197,4 +198,3 @@ int main(int argc, char* argv[])
   SIBus::kill();
   return 0;
 }
-
